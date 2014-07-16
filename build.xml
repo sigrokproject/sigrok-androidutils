@@ -1,0 +1,21 @@
+<project>
+
+  <target name="utils" >
+    <mkdir dir="build"/>
+    <javac srcdir="src" destdir="build" includeantruntime="no"
+	classpath="${android.sdk}/platforms/${android.platform}/android.jar"/>
+    <jar destfile="sigrok-androidutils.jar">
+      <fileset dir="build" />
+    </jar>
+  </target>
+
+  <target name="anttasks" >
+    <mkdir dir="ant/build"/>
+    <javac srcdir="ant/src" destdir="ant/build" includeantruntime="yes"/>
+    <jar destfile="ant/sigrok-androidutils-anttasks.jar">
+      <fileset dir="ant/build" />
+      <fileset dir="ant/resources"/>
+    </jar>
+  </target>
+
+</project>
