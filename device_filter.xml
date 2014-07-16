@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+
+    This file is part of the sigrok project.
+
+    Copyright (C) 2010-2013 Uwe Hermann <uwe@hermann-uwe.de>
+    Copyright (C) 2014 Marcus Comstedt <marcus@mc.pp.se>
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<resources>
+
+   <!-- ASIX SIGMA -->
+   <!-- ASIX SIGMA2 -->
+   <usb-device vendor-id="42496" product-id="40960" />
+
+   <!-- Braintechnology USB-LPS -->
+   <usb-device vendor-id="5840" product-id="1176" />
+
+   <!-- CEM DT-8852 -->
+   <usb-device vendor-id="4292" product-id="60000" />
+
+   <!-- ChronoVu LA8 (new VID/PID) -->
+   <!-- ChronoVu LA16 (new VID/PID) -->
+   <usb-device vendor-id="1027" product-id="34919" />
+
+   <!-- CWAV USBee AX -->
+   <!-- ARMFLY AX-Pro (clone of the CWAV USBee AX) -->
+   <!-- ARMFLY Mini-Logic (clone of the CWAV USBee AX) -->
+   <!-- EE Electronics ESLA201A (clone of the CWAV USBee AX) -->
+   <!-- MCU123 USBee AX Pro clone (clone of the CWAV USBee AX) -->
+   <!-- XZL_Studio AX (clone of the CWAV USBee AX) -->
+   <usb-device vendor-id="2217" product-id="20" />
+
+   <!-- CWAV USBee DX -->
+   <!-- XZL_Studio DX (clone of the CWAV USBee DX) -->
+   <usb-device vendor-id="2217" product-id="21" />
+
+   <!-- CWAV USBee SX -->
+   <usb-device vendor-id="2217" product-id="9" />
+
+   <!-- Cypress FX2 eval boards without EEPROM: -->
+   <!-- Lcsoft Mini Board -->
+   <!-- Braintechnology USB Interface V2.x -->
+   <usb-device vendor-id="1204" product-id="34323" />
+
+   <!-- Dangerous Prototypes Buspirate (v3) -->
+   <!-- ChronoVu LA8 (old VID/PID) -->
+   <!-- ChronoVu LA16 (old VID/PID) -->
+   <usb-device vendor-id="1027" product-id="24577" />
+
+   <!-- Dangerous Prototypes Buspirate (v4) -->
+   <usb-device vendor-id="1240" product-id="64256" />
+
+   <!-- Hantek DSO-2090 -->
+   <!-- lsusb: "04b4:2090 Cypress Semiconductor Corp." -->
+   <!-- lsusb after FW upload: "04b5:2090 ROHM LSI Systems USA, LLC" -->
+   <usb-device vendor-id="1204" product-id="8336" />
+   <usb-device vendor-id="1205" product-id="8336" />
+
+   <!-- Hantek DSO-2150 -->
+   <!-- lsusb: "04b4:2150 Cypress Semiconductor Corp." -->
+   <!-- lsusb after FW upload: "04b5:2150 ROHM LSI Systems USA, LLC" -->
+   <usb-device vendor-id="1204" product-id="8528" />
+   <usb-device vendor-id="1205" product-id="8528" />
+
+   <!-- Hantek DSO-2250 -->
+   <!-- lsusb: "04b4:2250 Cypress Semiconductor Corp." -->
+   <!-- lsusb after FW upload: "04b5:2250 ROHM LSI Systems USA, LLC" -->
+   <usb-device vendor-id="1204" product-id="8784" />
+   <usb-device vendor-id="1205" product-id="8784" />
+
+   <!-- Hantek DSO-5200 -->
+   <!-- lsusb: "04b4:5200 Cypress Semiconductor Corp." -->
+   <!-- lsusb after FW upload: "04b5:5200 ROHM LSI Systems USA, LLC" -->
+   <usb-device vendor-id="1204" product-id="20992" />
+   <usb-device vendor-id="1205" product-id="20992" />
+
+   <!-- Hantek DSO-5200A -->
+   <!-- lsusb: "04b4:520a Cypress Semiconductor Corp." -->
+   <!-- lsusb after FW upload: "04b5:520a ROHM LSI Systems USA, LLC" -->
+   <usb-device vendor-id="1204" product-id="21002" />
+   <usb-device vendor-id="1205" product-id="21002" />
+
+   <!-- IKALOGIC Scanalogic-2 -->
+   <usb-device vendor-id="8352" product-id="16675" />
+
+   <!-- IKALOGIC ScanaPLUS -->
+   <usb-device vendor-id="1027" product-id="24596" />
+
+   <!-- Kecheng KC-330B -->
+   <usb-device vendor-id="4161" product-id="33025" />
+
+   <!-- Lascar Electronics EL-USB-2 -->
+   <!-- Lascar Electronics EL-USB-CO -->
+   <!-- This is actually the generic SiLabs (Cygnal) F32x USBXpress VID:PID. -->
+   <usb-device vendor-id="4292" product-id="2" />
+
+   <!-- Link Instruments MSO-19 -->
+   <usb-device vendor-id="12693" product-id="61840" />
+
+   <!-- Logic Shrimp -->
+   <usb-device vendor-id="1240" product-id="64149" />
+
+   <!-- MiniLA Mockup -->
+   <usb-device vendor-id="1027" product-id="24592" />
+
+   <!-- MIC 98581 -->
+   <!-- MIC 98583 -->
+   <!-- Tondaj SL-814 -->
+   <usb-device vendor-id="1659" product-id="8963" />
+
+   <!-- Openbench Logic Sniffer -->
+   <usb-device vendor-id="1240" product-id="10" />
+
+   <!-- Rigol DS1000 series -->
+   <usb-device vendor-id="6833" product-id="1416" />
+
+   <!-- Rigol DS2000 series -->
+   <usb-device vendor-id="6833" product-id="1200" />
+
+   <!-- Rigol DG4000 series -->
+   <usb-device vendor-id="6833" product-id="1601" />
+
+   <!-- Agilent DSO1000 series -->
+   <usb-device vendor-id="2391" product-id="1416" />
+
+   <!-- Saleae Logic -->
+   <!-- EE Electronics ESLA100 (clone of the Saleae Logic) -->
+   <!-- Robomotic MiniLogic (clone of the Saleae Logic) -->
+   <!-- Robomotic BugLogic 3 (clone of the Saleae Logic) -->
+   <!-- MCU123 Saleae Logic clone (clone of the Saleae Logic) -->
+   <usb-device vendor-id="2341" product-id="14465" />
+
+   <!-- Saleae Logic16 -->
+   <usb-device vendor-id="8617" product-id="4097" />
+
+   <!-- SysClk LWLA1034 -->
+   <usb-device vendor-id="10593" product-id="26249" />
+
+   <!-- Testo 435 -->
+   <usb-device vendor-id="4749" product-id="3" />
+
+   <!-- UNI-T UT-D04 multimeter cable (for various UNI-T and rebranded DMMs) -->
+   <!-- http://sigrok.org/wiki/Device_cables#UNI-T_UT-D04 -->
+   <!-- UNI-T UT325 -->
+   <usb-device vendor-id="6790" product-id="57352" />
+
+   <!-- V&A VA4000 multimeter cable (for various V&A DMMs) -->
+   <!-- http://sigrok.org/wiki/Device_cables#V.26A_VA4000 -->
+   <usb-device vendor-id="1276" product-id="513" />
+
+   <!-- Victor 70C -->
+   <!-- Victor 86C -->
+   <usb-device vendor-id="4676" product-id="53815" />
+
+   <!-- ZEROPLUS Logic Cube LAP-C series -->
+   <!-- There are various devices in the ZEROPLUS Logic Cube series: -->
+   <!-- 0c12:7002: LAP-16128U -->
+   <!-- 0c12:7009: LAP-C(16064) -->
+   <!-- 0c12:700a: LAP-C(16128) -->
+   <!-- 0c12:700b: LAP-C(32128) -->
+   <!-- 0c12:700c: LAP-C(321000) -->
+   <!-- 0c12:700d: LAP-C(322000) -->
+   <!-- 0c12:700e: LAP-C(16032) -->
+   <!-- 0c12:7016: LAP-C(162000) -->
+   <usb-device vendor-id="3090" product-id="28674" />
+   <usb-device vendor-id="3090" product-id="28681" />
+   <usb-device vendor-id="3090" product-id="28682" />
+   <usb-device vendor-id="3090" product-id="28683" />
+   <usb-device vendor-id="3090" product-id="28684" />
+   <usb-device vendor-id="3090" product-id="28685" />
+   <usb-device vendor-id="3090" product-id="28686" />
+   <usb-device vendor-id="3090" product-id="28694" />
+
+</resources>

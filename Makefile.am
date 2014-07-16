@@ -1,4 +1,9 @@
 
+pkgdata_DATA = device_filter.xml
+
+jardir = $(prefix)/jar
+jar_DATA = $(UTILS_JAR) $(ANTTASKS_JAR)
+
 UTILS_JAR = sigrok-androidutils.jar
 
 ANTTASKS_JAR = ant/sigrok-androidutils-anttasks.jar
@@ -12,9 +17,6 @@ $(UTILS_JAR): always
 
 $(ANTTASKS_JAR): always
 	@ant anttasks
-
-install: 
-	cp $(UTILS_JAR) $(ANTTASKS_JAR) $(prefix)/jar
 
 .PHONY: always
 
