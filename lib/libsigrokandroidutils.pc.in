@@ -1,0 +1,12 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+
+Name: libsigrokandroidutils
+Description: Android support code for sigrok
+URL: http://www.sigrok.org
+Version: @VERSION@
+Libs: -L${libdir} -lsigrokandroidutils
+Cflags: -I${includedir}
+

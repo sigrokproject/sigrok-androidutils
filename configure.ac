@@ -15,7 +15,10 @@ AC_ARG_WITH([android-platform],
 	[ANDROID_PLATFORM="$withval"],
 	[ANDROID_PLATFORM=android-14])
 
+LT_INIT
+AC_PROG_CXX
+
 AC_SUBST([ANDROID_SDK])
 AC_SUBST([ANDROID_PLATFORM])
 
-AC_OUTPUT([Makefile])
+AC_OUTPUT([Makefile lib/Makefile lib/libsigrokandroidutils.pc])

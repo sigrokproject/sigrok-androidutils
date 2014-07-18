@@ -1,4 +1,6 @@
 
+SUBDIRS = lib
+
 pkgdata_DATA = device_filter.xml
 
 jardir = $(prefix)/jar
