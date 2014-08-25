@@ -38,217 +38,220 @@ import org.xmlpull.v1.XmlPullParserException;
 
 public class UsbSupplicant
 {
-    private static final String ACTION_USB_PERMISSION =
+	private static final String ACTION_USB_PERMISSION =
 	"org.sigrok.androidutils.USB_PERMISSION";
 
-    protected final Context context;
-    protected final UsbManager manager;
-    private final BroadcastReceiver permReceiver;
-    private final BroadcastReceiver hotplugReceiver;
-    private final IntentFilter permFilter;
-    private final IntentFilter hotplugFilter;
-    private final Vector<DeviceFilter> deviceFilters;
+	protected final Context context;
+	protected final UsbManager manager;
+	private final BroadcastReceiver permReceiver;
+	private final BroadcastReceiver hotplugReceiver;
+	private final IntentFilter permFilter;
+	private final IntentFilter hotplugFilter;
+	private final Vector<DeviceFilter> deviceFilters;
 
-    // The code in the following inner class is taken from AOSP,
-    // which is licensed under the Apache License, Version 2.0
-    private static class DeviceFilter {
-        // USB Vendor ID (or -1 for unspecified)
-        public final int mVendorId;
-        // USB Product ID (or -1 for unspecified)
-        public final int mProductId;
-        // USB device or interface class (or -1 for unspecified)
-        public final int mClass;
-        // USB device subclass (or -1 for unspecified)
-        public final int mSubclass;
-        // USB device protocol (or -1 for unspecified)
-        public final int mProtocol;
+	// The code in the following inner class is taken from AOSP,
+	// which is licensed under the Apache License, Version 2.0.
+	private static class DeviceFilter {
+		// USB Vendor ID (or -1 for unspecified)
+		public final int mVendorId;
+		// USB Product ID (or -1 for unspecified)
+		public final int mProductId;
+		// USB device or interface class (or -1 for unspecified)
+		public final int mClass;
+		// USB device subclass (or -1 for unspecified)
+		public final int mSubclass;
+		// USB device protocol (or -1 for unspecified)
+		public final int mProtocol;
 
-        public DeviceFilter(int vid, int pid, int clasz, int subclass, int protocol) {
-            mVendorId = vid;
-            mProductId = pid;
-            mClass = clasz;
-            mSubclass = subclass;
-            mProtocol = protocol;
-        }
+		public DeviceFilter(int vid, int pid, int clasz, int subclass, int protocol) {
+			mVendorId = vid;
+			mProductId = pid;
+			mClass = clasz;
+			mSubclass = subclass;
+			mProtocol = protocol;
+		}
 
-        public DeviceFilter(UsbDevice device) {
-            mVendorId = device.getVendorId();
-            mProductId = device.getProductId();
-            mClass = device.getDeviceClass();
-            mSubclass = device.getDeviceSubclass();
-            mProtocol = device.getDeviceProtocol();
-        }
+		public DeviceFilter(UsbDevice device) {
+			mVendorId = device.getVendorId();
+			mProductId = device.getProductId();
+			mClass = device.getDeviceClass();
+			mSubclass = device.getDeviceSubclass();
+			mProtocol = device.getDeviceProtocol();
+		}
 
-        public static DeviceFilter read(XmlPullParser parser)
-                throws XmlPullParserException, IOException {
-            int vendorId = -1;
-            int productId = -1;
-            int deviceClass = -1;
-            int deviceSubclass = -1;
-            int deviceProtocol = -1;
+		public static DeviceFilter read(XmlPullParser parser)
+				throws XmlPullParserException, IOException {
+			int vendorId = -1;
+			int productId = -1;
+			int deviceClass = -1;
+			int deviceSubclass = -1;
+			int deviceProtocol = -1;
 
-            int count = parser.getAttributeCount();
-            for (int i = 0; i < count; i++) {
-                String name = parser.getAttributeName(i);
-                // All attribute values are ints
-                int value = Integer.parseInt(parser.getAttributeValue(i));
+			int count = parser.getAttributeCount();
+			for (int i = 0; i < count; i++) {
+				String name = parser.getAttributeName(i);
+				// All attribute values are ints
+				int value = Integer.parseInt(parser.getAttributeValue(i));
 
-                if ("vendor-id".equals(name)) {
-                    vendorId = value;
-                } else if ("product-id".equals(name)) {
-                    productId = value;
-                } else if ("class".equals(name)) {
-                    deviceClass = value;
-                } else if ("subclass".equals(name)) {
-                    deviceSubclass = value;
-                } else if ("protocol".equals(name)) {
-                    deviceProtocol = value;
-                }
-            }
-            return new DeviceFilter(vendorId, productId,
-                    deviceClass, deviceSubclass, deviceProtocol);
-        }
+				if ("vendor-id".equals(name)) {
+					vendorId = value;
+				} else if ("product-id".equals(name)) {
+					productId = value;
+				} else if ("class".equals(name)) {
+					deviceClass = value;
+				} else if ("subclass".equals(name)) {
+					deviceSubclass = value;
+				} else if ("protocol".equals(name)) {
+					deviceProtocol = value;
+				}
+			}
+			return new DeviceFilter(vendorId, productId,
+					deviceClass, deviceSubclass, deviceProtocol);
+		}
 
-        private boolean matches(int clasz, int subclass, int protocol) {
-            return ((mClass == -1 || clasz == mClass) &&
-                    (mSubclass == -1 || subclass == mSubclass) &&
-                    (mProtocol == -1 || protocol == mProtocol));
-        }
+		private boolean matches(int clasz, int subclass, int protocol) {
+			return ((mClass == -1 || clasz == mClass) &&
+					(mSubclass == -1 || subclass == mSubclass) &&
+					(mProtocol == -1 || protocol == mProtocol));
+		}
 
-        public boolean matches(UsbDevice device) {
-            if (mVendorId != -1 && device.getVendorId() != mVendorId) return false;
-            if (mProductId != -1 && device.getProductId() != mProductId) return false;
+		public boolean matches(UsbDevice device) {
+			if (mVendorId != -1 && device.getVendorId() != mVendorId)
+				return false;
+			if (mProductId != -1 && device.getProductId() != mProductId)
+				return false;
 
-            // check device class/subclass/protocol
-            if (matches(device.getDeviceClass(), device.getDeviceSubclass(),
-                    device.getDeviceProtocol())) return true;
+			// Check device class/subclass/protocol.
+			if (matches(device.getDeviceClass(), device.getDeviceSubclass(),
+					device.getDeviceProtocol()))
+				return true;
 
-            // if device doesn't match, check the interfaces
-            int count = device.getInterfaceCount();
-            for (int i = 0; i < count; i++) {
-                UsbInterface intf = device.getInterface(i);
-                 if (matches(intf.getInterfaceClass(), intf.getInterfaceSubclass(),
-                        intf.getInterfaceProtocol())) return true;
-            }
+			// If device doesn't match, check the interfaces.
+			int count = device.getInterfaceCount();
+			for (int i = 0; i < count; i++) {
+				UsbInterface intf = device.getInterface(i);
+				if (matches(intf.getInterfaceClass(), intf.getInterfaceSubclass(),
+						intf.getInterfaceProtocol()))
+					return true;
+			}
 
-            return false;
-        }
+			return false;
+		}
 
-        @Override
-        public String toString() {
-            return "DeviceFilter[mVendorId=" + mVendorId + ",mProductId=" + mProductId +
-                    ",mClass=" + mClass + ",mSubclass=" + mSubclass +
-                    ",mProtocol=" + mProtocol + "]";
-        }
-    }
-
-    public UsbSupplicant(Context ctx, int device_filter_resource)
-    {
-	context = ctx;
-	manager = (UsbManager) ctx.getSystemService(Context.USB_SERVICE);
-	permReceiver = new BroadcastReceiver() {
 		@Override
-		public void onReceive(Context context, Intent intent) {
-		    String action = intent.getAction();
-		    if (ACTION_USB_PERMISSION.equals(action)) {
-			permissionCallback((UsbDevice)intent.getParcelableExtra(UsbManager.EXTRA_DEVICE),
-					   intent.getBooleanExtra(UsbManager.EXTRA_PERMISSION_GRANTED, false));
-		    }
+		public String toString() {
+			return "DeviceFilter[mVendorId=" + mVendorId + ",mProductId=" + mProductId +
+					",mClass=" + mClass + ",mSubclass=" + mSubclass +
+					",mProtocol=" + mProtocol + "]";
 		}
-	    };
-	hotplugReceiver = new BroadcastReceiver() {
-		@Override
-		public void onReceive(Context context, Intent intent) {
-		    if (intent != null &&
-			UsbManager.ACTION_USB_DEVICE_ATTACHED.equals(intent.getAction())) {
-			attachCallback((UsbDevice)intent.getParcelableExtra(UsbManager.EXTRA_DEVICE));
-		    } else if (intent != null &&
-			       UsbManager.ACTION_USB_DEVICE_DETACHED.equals(intent.getAction())) {
-			detachCallback((UsbDevice)intent.getParcelableExtra(UsbManager.EXTRA_DEVICE));
-		    }
+	}
+
+	public UsbSupplicant(Context ctx, int device_filter_resource)
+	{
+		context = ctx;
+		manager = (UsbManager) ctx.getSystemService(Context.USB_SERVICE);
+		permReceiver = new BroadcastReceiver() {
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				String action = intent.getAction();
+				if (ACTION_USB_PERMISSION.equals(action)) {
+					permissionCallback((UsbDevice)intent.getParcelableExtra(
+						UsbManager.EXTRA_DEVICE), intent.getBooleanExtra(
+						UsbManager.EXTRA_PERMISSION_GRANTED, false));
+				}
+			}
+		};
+		hotplugReceiver = new BroadcastReceiver() {
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				if (intent != null && UsbManager.ACTION_USB_DEVICE_ATTACHED.equals(intent.getAction())) {
+					attachCallback((UsbDevice)intent.getParcelableExtra(UsbManager.EXTRA_DEVICE));
+				} else if (intent != null && UsbManager.ACTION_USB_DEVICE_DETACHED.equals(intent.getAction())) {
+					detachCallback((UsbDevice)intent.getParcelableExtra(UsbManager.EXTRA_DEVICE));
+				}
+			}
+		};
+		permFilter = new IntentFilter(ACTION_USB_PERMISSION);
+		hotplugFilter = new IntentFilter(UsbManager.ACTION_USB_DEVICE_ATTACHED);
+		hotplugFilter.addAction(UsbManager.ACTION_USB_DEVICE_DETACHED);
+		deviceFilters = new Vector<DeviceFilter>();
+		addDeviceFilters(ctx.getResources(), device_filter_resource);
+	}
+
+	private void addDeviceFilters(Resources res, int res_id)
+	{
+		XmlResourceParser parser = res.getXml(res_id);
+		if (parser == null) {
+			Log.w("UsbSupplicant", "Unable to get device filter resource");
+			return;
 		}
-	    };
-	permFilter = new IntentFilter(ACTION_USB_PERMISSION);
-	hotplugFilter = new IntentFilter(UsbManager.ACTION_USB_DEVICE_ATTACHED);
-	hotplugFilter.addAction(UsbManager.ACTION_USB_DEVICE_DETACHED);
-	deviceFilters = new Vector<DeviceFilter>();
-	addDeviceFilters(ctx.getResources(), device_filter_resource);
-    }
-
-    private void addDeviceFilters(Resources res, int res_id)
-    {
-        XmlResourceParser parser = res.getXml(res_id);
-	if (parser == null) {
-	    Log.w("UsbSupplicant", "Unable to get device filter resource");
-	    return;
-	}
-	deviceFilters.clear();
-	try {
-	    while (parser.next() != XmlPullParser.END_DOCUMENT) {
-		if (parser.getEventType() == XmlPullParser.START_TAG) {
-		    if ("usb-device".equals(parser.getName())) {
-			deviceFilters.add(DeviceFilter.read(parser));
-		    }
+		deviceFilters.clear();
+		try {
+			while (parser.next() != XmlPullParser.END_DOCUMENT) {
+				if (parser.getEventType() == XmlPullParser.START_TAG) {
+					if ("usb-device".equals(parser.getName()))
+						deviceFilters.add(DeviceFilter.read(parser));
+				}
+			}
+		} catch (IOException e) {
+			Log.wtf("UsbSupplicant",
+				"Failed to parse device filter resource", e);
+		} catch (XmlPullParserException e) {
+			Log.wtf("UsbSupplicant",
+				"Failed to parse device filter resource", e);
 		}
-	    }
-	} catch(IOException e) {
-	    Log.wtf("UsbSupplicant",
-		    "Failed to parse device filter resource", e);
-	} catch(XmlPullParserException e) {
-	    Log.wtf("UsbSupplicant",
-		    "Failed to parse device filter resource", e);
 	}
-    }
 
-    protected boolean interresting(UsbDevice dev)
-    {
-	if (dev == null)
-	    return false;
+	protected boolean interresting(UsbDevice dev)
+	{
+		if (dev == null)
+			return false;
 
-	for (DeviceFilter f : deviceFilters)
-	    if (f.matches(dev))
-		return true;
+		for (DeviceFilter f : deviceFilters)
+			if (f.matches(dev))
+				return true;
 
-	return false;
-    }
-
-    protected void askFor(UsbDevice dev)
-    {
-	manager.requestPermission(dev, PendingIntent.getBroadcast(context, 0, new Intent(ACTION_USB_PERMISSION), 0));
-    }
-
-    public void start()
-    {
-	context.registerReceiver(permReceiver, permFilter);
-	context.registerReceiver(hotplugReceiver, hotplugFilter);
-	HashMap<String,UsbDevice> devlist = manager.getDeviceList();
-	for (UsbDevice dev : devlist.values()) {
-	    if (interresting(dev) && !manager.hasPermission(dev)) {
-		Log.d("UsbSupplicant", "found interresting device "+dev);
-		askFor(dev);
-	    }
+		return false;
 	}
-    }
 
-    public void stop()
-    {
-	context.unregisterReceiver(hotplugReceiver);
-	context.unregisterReceiver(permReceiver);
-    }
-
-    protected void permissionCallback(UsbDevice dev, boolean granted)
-    {
-	Log.d("UsbSupplicant", "permission " + (granted? "granted" : "denied") + " for device " + dev);
-    }
-
-    protected void attachCallback(UsbDevice dev)
-    {
-	if (interresting(dev) && !manager.hasPermission(dev)) {
-	    askFor(dev);
+	protected void askFor(UsbDevice dev)
+	{
+		manager.requestPermission(dev, PendingIntent.getBroadcast(context, 0,
+			new Intent(ACTION_USB_PERMISSION), 0));
 	}
-    }
 
-    protected void detachCallback(UsbDevice dev)
-    {
-    }
+	public void start()
+	{
+		context.registerReceiver(permReceiver, permFilter);
+		context.registerReceiver(hotplugReceiver, hotplugFilter);
+		HashMap<String,UsbDevice> devlist = manager.getDeviceList();
+		for (UsbDevice dev : devlist.values()) {
+			if (interresting(dev) && !manager.hasPermission(dev)) {
+				Log.d("UsbSupplicant", "found interresting device " + dev);
+				askFor(dev);
+			}
+		}
+	}
+
+	public void stop()
+	{
+		context.unregisterReceiver(hotplugReceiver);
+		context.unregisterReceiver(permReceiver);
+	}
+
+	protected void permissionCallback(UsbDevice dev, boolean granted)
+	{
+		Log.d("UsbSupplicant", "permission " +
+				(granted ? "granted" : "denied") + " for device " + dev);
+	}
+
+	protected void attachCallback(UsbDevice dev)
+	{
+		if (interresting(dev) && !manager.hasPermission(dev))
+			askFor(dev);
+	}
+
+	protected void detachCallback(UsbDevice dev)
+	{
+	}
 }

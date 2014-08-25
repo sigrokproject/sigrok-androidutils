@@ -28,42 +28,40 @@ import java.util.HashMap;
 
 public final class UsbHelper
 {
-    private static UsbManager manager;
+	private static UsbManager manager;
 
-    public static void setContext(Context ctx)
-    {
-	if (ctx == null)
-	    manager = null;
-	else
-	    manager = (UsbManager) ctx.getSystemService(Context.USB_SERVICE);
-    }
+	public static void setContext(Context ctx)
+	{
+		if (ctx == null)
+			manager = null;
+		else
+			manager = (UsbManager) ctx.getSystemService(Context.USB_SERVICE);
+	}
 
-    private static int open(UsbManager manager, String name, int mode)
-    {
-	if (manager == null) {
-	    Log.w("UsbHelper", "no manager");
-	    return -1;
+	private static int open(UsbManager manager, String name, int mode)
+	{
+		if (manager == null) {
+			Log.w("UsbHelper", "no manager");
+			return -1;
+		}
+		HashMap<String,UsbDevice> devlist = manager.getDeviceList();
+		UsbDevice dev = (devlist == null ? null : devlist.get(name));
+		if (dev == null)
+			return -1;
+		if (!manager.hasPermission(dev))
+			return -1;
+		UsbDeviceConnection conn = manager.openDevice(dev);
+		return (conn == null ? -1 : conn.getFileDescriptor());
 	}
-	HashMap<String,UsbDevice> devlist = manager.getDeviceList();
-	UsbDevice dev = (devlist == null? null : devlist.get(name));
-	if (dev == null) {
-	    return -1;
-	}
-	if (!manager.hasPermission(dev)) {
-	    return -1;
-	}
-	UsbDeviceConnection conn = manager.openDevice(dev);
-	return (conn == null? -1 : conn.getFileDescriptor());
-    }
 
-    public static int open(String name, int mode)
-    {
-	try {
-	    return open(manager, name, mode);
-	} catch(Exception e) {
-	    Log.w("UsbHelper", "caught exception "+e);
-	    return -1;
+	public static int open(String name, int mode)
+	{
+		try {
+			return open(manager, name, mode);
+		} catch (Exception e) {
+			Log.w("UsbHelper", "caught exception " + e);
+			return -1;
+		}
 	}
-    }
 }
 

@@ -27,9 +27,8 @@ SRAU_PRIV int srau_get_java_env(JNIEnv **env)
 {
 	jint st;
 
-	if (g_jvm == NULL) {
+	if (g_jvm == NULL)
 		return -1;
-	}
 
 	st = g_jvm->GetEnv((void **)env, JNI_VERSION_1_6);
 
@@ -44,31 +43,28 @@ SRAU_PRIV int srau_get_java_env(JNIEnv **env)
 
 SRAU_PRIV void srau_unget_java_env(int mode)
 {
-	if (mode == 1) {
+	if (mode == 1)
 		g_jvm->DetachCurrentThread();
-	}
 }
 
 SRAU_PRIV jclass srau_get_environment_class(JNIEnv *env)
 {
-	if (env && g_environment_class) {
+	if (env && g_environment_class)
 		return (jclass)env->NewLocalRef(g_environment_class);
-	} else {
+	else
 		return 0;
-	}
 }
 
 jint JNI_OnLoad(JavaVM *vm, void *reserved)
 {
-	JNIEnv* env;
+	JNIEnv *env;
 
 	(void)reserved;
 
-        if (vm->GetEnv((void **)&env, JNI_VERSION_1_6) != JNI_OK) {
-                return -1;
-        }
+	if (vm->GetEnv((void **)&env, JNI_VERSION_1_6) != JNI_OK)
+		return -1;
 
-        jclass envc = env->FindClass("org/sigrok/androidutils/Environment");
+	jclass envc = env->FindClass("org/sigrok/androidutils/Environment");
 	if (envc) {
 		g_environment_class = (jclass)env->NewGlobalRef(envc);
 		env->DeleteLocalRef(envc);
@@ -81,15 +77,14 @@ jint JNI_OnLoad(JavaVM *vm, void *reserved)
 
 void JNI_OnUnload(JavaVM *vm, void *reserved)
 {
-	JNIEnv* env;
+	JNIEnv *env;
 
 	(void)reserved;
 
 	g_jvm = NULL;
 
-        if (vm->GetEnv((void **)&env, JNI_VERSION_1_6) != JNI_OK) {
-                return;
-        }
+	if (vm->GetEnv((void **)&env, JNI_VERSION_1_6) != JNI_OK)
+		return;
 
 	if (g_environment_class) {
 		env->DeleteGlobalRef(g_environment_class);

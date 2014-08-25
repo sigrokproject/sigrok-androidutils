@@ -28,7 +28,7 @@ extern "C" {
  * Use SRAU_API to mark public API symbols, and SRAU_PRIV for private symbols.
  *
  * Variables and functions marked 'static' are private already and don't
- * need SR_PRIV. However, functions which are not static (because they need
+ * need SRAU_PRIV. However, functions which are not static (because they need
  * to be used in other libsigrokandroidutils-internal files) but are also
  * not meant to be part of the public libsigrokandroidutils API, must use
  * SRAU_PRIV.
@@ -41,10 +41,8 @@ extern "C" {
 /* Marks public libsigrokandroidutils API symbols. */
 #define SRAU_API __attribute__((visibility("default")))
 
-/* Marks private, non-public libsigrokandroidutils symbols (not part of the API). */
+/* Marks private, non-public, non-API libsigrokandroidutils symbols. */
 #define SRAU_PRIV __attribute__((visibility("hidden")))
-
-
 
 SRAU_API void srau_init_environment(void);
 

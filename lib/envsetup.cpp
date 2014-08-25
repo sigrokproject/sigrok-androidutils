@@ -22,7 +22,7 @@
 
 SRAU_API void srau_init_environment(void)
 {
-	JNIEnv* env;
+	JNIEnv *env;
 
 	int attach_mode = srau_get_java_env(&env);
 
@@ -38,9 +38,9 @@ SRAU_API void srau_init_environment(void)
 	jobjectArray envs =
 		(jobjectArray)env->CallStaticObjectMethod(envc, getEnv);
 	jsize i, envn = env->GetArrayLength(envs);
-	for (i=0; i<envn; i+=2) {
+	for (i = 0; i < envn; i += 2) {
 		jstring key = (jstring)env->GetObjectArrayElement(envs, i);
-		jstring value = (jstring)env->GetObjectArrayElement(envs, i+1);
+		jstring value = (jstring)env->GetObjectArrayElement(envs, i + 1);
 		const char *utfkey = env->GetStringUTFChars(key, 0);
 		const char *utfvalue = env->GetStringUTFChars(value, 0);
 		setenv(utfkey, utfvalue, 1);
