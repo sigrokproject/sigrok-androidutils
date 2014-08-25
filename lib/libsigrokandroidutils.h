@@ -1,5 +1,5 @@
 /*
- * This file is part of the sigrok project.
+ * This file is part of the sigrok-androidutils project.
  *
  * Copyright (C) 2014 Marcus Comstedt <marcus@mc.pp.se>
  *
