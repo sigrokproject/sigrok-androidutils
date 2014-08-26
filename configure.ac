@@ -20,7 +20,9 @@
 AC_INIT([sigrok-androidutils], [0.1.0])
 
 AC_CONFIG_SRCDIR([src/org/sigrok/androidutils/UsbHelper.java])
-AM_INIT_AUTOMAKE
+
+AM_INIT_AUTOMAKE([1.11 -Wall -Werror subdir-objects])
+m4_ifdef([AM_PROG_AR], [AM_PROG_AR])
 
 AC_ARG_WITH([android-sdk],
 	[AS_HELP_STRING([--with-android-sdk],
@@ -36,8 +38,9 @@ AC_ARG_WITH([android-platform],
 
 LT_INIT
 AC_PROG_CXX
+AM_PROG_CC_C_O
 
 AC_SUBST([ANDROID_SDK])
 AC_SUBST([ANDROID_PLATFORM])
 
-AC_OUTPUT([Makefile lib/Makefile lib/libsigrokandroidutils.pc])
+AC_OUTPUT([Makefile lib/libsigrokandroidutils.pc])

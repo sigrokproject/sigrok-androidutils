@@ -17,7 +17,21 @@
 ## along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ##
 
-SUBDIRS = lib
+lib_LTLIBRARIES = libsigrokandroidutils.la
+
+libsigrokandroidutils_la_CXXFLAGS = \
+	-fno-exceptions
+
+libsigrokandroidutils_la_SOURCES = \
+	lib/jvm_glue.cpp \
+	lib/envsetup.cpp
+
+pkgconfigdir = $(libdir)/pkgconfig
+pkgconfig_DATA = lib/libsigrokandroidutils.pc
+
+library_includedir = $(includedir)/libsigrokandroidutils
+library_include_HEADERS = lib/libsigrokandroidutils.h
+noinst_HEADERS = lib/libsigrokandroidutils-internal.h
 
 dist_pkgdata_DATA = device_filter.xml
 
