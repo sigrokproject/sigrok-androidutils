@@ -47,10 +47,10 @@ ANTFLAGS = -Dandroid.sdk=$(ANDROID_SDK) -Dandroid.platform=$(ANDROID_PLATFORM)
 EXTRA_DIST = build.xml src ant/src ant/resources
 
 $(UTILS_JAR): always
-	@ant $(ANTFLAGS) utils
+	$(AM_V_GEN)ant -S -q $(ANTFLAGS) utils
 
 $(ANTTASKS_JAR): always
-	@ant anttasks
+	$(AM_V_GEN)ant -S -q anttasks
 
 clean-local:
 	-rm -rf build ant/build
