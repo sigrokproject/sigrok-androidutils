@@ -17,7 +17,8 @@
 ## along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ##
 
-AC_INIT([sigrok-androidutils], [0.1.0])
+AC_INIT([sigrok-androidutils], [0.1.0], [sigrok-devel@lists.sourceforge.net],
+	[sigrok-androidutils], [http://www.sigrok.org])
 
 AC_CONFIG_SRCDIR([src/org/sigrok/androidutils/UsbHelper.java])
 
@@ -27,13 +28,13 @@ m4_ifdef([AM_PROG_AR], [AM_PROG_AR])
 
 AC_ARG_WITH([android-sdk],
 	[AS_HELP_STRING([--with-android-sdk],
-	  [specify path to android SDK @<:@default=/usr/local/android@:>@])],
+	  [specify path to Android SDK @<:@default=/usr/local/android@:>@])],
 	[ANDROID_SDK="$withval"],
 	[ANDROID_SDK=/usr/local/android])
 
 AC_ARG_WITH([android-platform],
 	[AS_HELP_STRING([--with-android-platform],
-	  [select android platform to build for @<:@default=android-14@:>@])],
+	  [select Android platform to build for @<:@default=android-14@:>@])],
 	[ANDROID_PLATFORM="$withval"],
 	[ANDROID_PLATFORM=android-14])
 
