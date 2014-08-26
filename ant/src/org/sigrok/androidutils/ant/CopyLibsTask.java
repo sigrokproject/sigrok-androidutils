@@ -299,7 +299,7 @@ public class CopyLibsTask extends Task
 
 		protected void setDependency(Library l1, Library l2)
 		{
-			if (l2 == null) // Dependancy on external lib.
+			if (l2 == null) // Dependency on external lib.
 				return;
 			l1.dependencies.add(l2);
 			l2.dependedUpon = true;
@@ -348,7 +348,7 @@ public class CopyLibsTask extends Task
 		protected void process(Library l) throws Exception
 		{
 			if (processedLibs.contains(l))
-				return; // Already processed
+				return; // Already processed.
 			processedLibs.add(l);
 			addRpath(l.rpath);
 			for (String need : l.needed)
@@ -390,7 +390,7 @@ public class CopyLibsTask extends Task
 			}
 			if (property != null) {
 				Vector<Library> order =
-					topoSort(new HashSet<Library>(processedLibs));;
+					topoSort(new HashSet<Library>(processedLibs));
 				StringBuilder sb = new StringBuilder();
 				for (Library l : order) {
 					String name = l.destname;

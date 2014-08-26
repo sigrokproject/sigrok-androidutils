@@ -202,7 +202,7 @@ public class UsbSupplicant
 		}
 	}
 
-	protected boolean interresting(UsbDevice dev)
+	protected boolean interesting(UsbDevice dev)
 	{
 		if (dev == null)
 			return false;
@@ -226,8 +226,8 @@ public class UsbSupplicant
 		context.registerReceiver(hotplugReceiver, hotplugFilter);
 		HashMap<String,UsbDevice> devlist = manager.getDeviceList();
 		for (UsbDevice dev : devlist.values()) {
-			if (interresting(dev) && !manager.hasPermission(dev)) {
-				Log.d("UsbSupplicant", "found interresting device " + dev);
+			if (interesting(dev) && !manager.hasPermission(dev)) {
+				Log.d("UsbSupplicant", "found interesting device " + dev);
 				askFor(dev);
 			}
 		}
@@ -247,7 +247,7 @@ public class UsbSupplicant
 
 	protected void attachCallback(UsbDevice dev)
 	{
-		if (interresting(dev) && !manager.hasPermission(dev))
+		if (interesting(dev) && !manager.hasPermission(dev))
 			askFor(dev);
 	}
 
