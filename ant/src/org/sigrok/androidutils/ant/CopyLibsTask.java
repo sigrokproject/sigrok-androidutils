@@ -142,7 +142,8 @@ public class CopyLibsTask extends Task
 			String name = new String(s, offs, nul-offs, "US-ASCII");
 			offs += base;
 
-			if (d.d_tag == ElfFile.DT_RPATH) {
+			if (d.d_tag == ElfFile.DT_RPATH ||
+			    d.d_tag == ElfFile.DT_RUNPATH) {
 				// Zap rpath,
 				fixups.add(new Range(offs, offs + name.length()));
 			} else {
@@ -169,7 +170,8 @@ public class CopyLibsTask extends Task
 					soname = getDynstr(d, strs, strsh.sh_offset);
 				else if (d.d_tag == ElfFile.DT_NEEDED)
 					addNeeded(getDynstr(d, strs, strsh.sh_offset));
-				else if (d.d_tag == ElfFile.DT_RPATH)
+				else if (d.d_tag == ElfFile.DT_RPATH ||
+					 d.d_tag == ElfFile.DT_RUNPATH)
 					addRpath(getDynstr(d, strs, strsh.sh_offset));
 			}
 		}
