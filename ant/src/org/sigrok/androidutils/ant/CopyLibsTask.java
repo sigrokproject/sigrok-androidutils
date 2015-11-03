@@ -328,16 +328,22 @@ public class CopyLibsTask extends Task
 			if (l != null)
 				return l;
 			boolean include = false;
-			for (String patt : patterns.getIncludePatterns(getProject())) {
-				if (SelectorUtils.match(patt, s)) {
-					include = true;
-					break;
+			String[] includePatterns = patterns.getIncludePatterns(getProject());
+			if (includePatterns != null) {
+				for (String patt : includePatterns) {
+					if (SelectorUtils.match(patt, s)) {
+						include = true;
+						break;
+					}
 				}
 			}
 			if (!include) {
-				for (String patt : patterns.getExcludePatterns(getProject())) {
-					if (SelectorUtils.match(patt, s))
-						return null;
+				String[] excludePatterns = patterns.getExcludePatterns(getProject());
+				if (excludePatterns != null) {
+					for (String patt : excludePatterns) {
+						if (SelectorUtils.match(patt, s))
+							return null;
+					}
 				}
 			}
 			l = findLibInRpath(s, subdir);
