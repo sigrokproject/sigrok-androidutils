@@ -45,6 +45,14 @@ import org.apache.tools.ant.types.selectors.SelectorUtils;
 
 public class CopyLibsTask extends Task
 {
+	private static final HashMap<String,String> blacklist;
+
+	static {
+	    HashMap bl = new HashMap<String,String>();
+	    bl.put("libpcre.so", "libercp.so");
+	    blacklist = bl;
+	}
+
 	private static BuildException buildException(Exception e)
 	{
 		if (e instanceof BuildException)
@@ -70,9 +78,13 @@ public class CopyLibsTask extends Task
 		int i = s.lastIndexOf(".so");
 
 		if (i >= 0 && i < (l - 3))
-			return s.substring(0, i + 3);
-		else
-			return s;
+			s = s.substring(0, i + 3);
+
+		String bl = blacklist.get(s);
+		if (bl != null)
+		    s = bl;
+
+		return s;
 	}
 
 	protected class Library implements Comparable<Library>
@@ -90,6 +102,7 @@ public class CopyLibsTask extends Task
 		protected class Range implements Comparable<Range>
 		{
 			public final long start, end;
+			public final byte[] replacement;
 
 			public int compareTo(Range r)
 			{
@@ -105,10 +118,16 @@ public class CopyLibsTask extends Task
 					return 0;
 			}
 
-			public Range(long start, long end)
+			public Range(long start, long end, byte[] replacement)
 			{
 				this.start = start;
 				this.end = end;
+				this.replacement = replacement;
+			}
+
+			public Range(long start, long end)
+			{
+				this(start, end, null);
 			}
 		}
 
@@ -151,6 +170,9 @@ public class CopyLibsTask extends Task
 				if (fix.length() < name.length()) {
 					fixups.add(new Range(offs + fix.length(),
 						offs + name.length()));
+				}
+				if (!fix.equals(name.substring(0, fix.length()))) {
+				        fixups.add(new Range(offs, offs + fix.length(), fix.getBytes("US-ASCII")));
 				}
 			}
 			return name;
@@ -224,7 +246,10 @@ public class CopyLibsTask extends Task
 							if (r < 0)
 								break outer;
 							if (r > 0) {
-								Arrays.fill(buf, 0, r, (byte)0);
+								if (rg.replacement == null)
+								    Arrays.fill(buf, 0, r, (byte)0);
+								else
+								    System.arraycopy(rg.replacement, (int)(offs-rg.start), buf, 0, r);
 								os.write(buf, 0, r);
 								chunk -= r;
 							}
