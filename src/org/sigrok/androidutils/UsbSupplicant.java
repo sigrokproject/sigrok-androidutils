@@ -53,7 +53,7 @@ import org.xmlpull.v1.XmlPullParserException;
 
 public class UsbSupplicant
 {
-	private static final String ACTION_USB_PERMISSION =
+	static final String ACTION_USB_PERMISSION =
 	"org.sigrok.androidutils.USB_PERMISSION";
 
 	protected final Context context;

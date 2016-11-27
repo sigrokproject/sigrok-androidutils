@@ -29,9 +29,12 @@ import java.util.HashMap;
 public final class UsbHelper
 {
 	private static UsbManager manager;
+	private static Context context;
+	private static UsbEventMonitor eventMonitor;
 
 	public static void setContext(Context ctx)
 	{
+		context = ctx;
 		if (ctx == null)
 			manager = null;
 		else
@@ -54,6 +57,45 @@ public final class UsbHelper
 		return (conn == null ? -1 : conn.getFileDescriptor());
 	}
 
+	private static synchronized void startEventMonitor(Context context, UsbManager manager, UsbEventListener listener)
+	{
+		if (eventMonitor != null) {
+		    eventMonitor.stop();
+		    eventMonitor = null;
+		}
+		if (context == null) {
+			Log.w("UsbHelper", "no context");
+			return;
+		}
+		if (manager == null) {
+			Log.w("UsbHelper", "no manager");
+			return;
+		}
+		eventMonitor = new UsbEventMonitor(context, manager, listener);
+		eventMonitor.start();
+	}
+
+	private static synchronized void stopEventMonitor(Context context)
+	{
+		if (eventMonitor != null) {
+		    eventMonitor.stop();
+		    eventMonitor = null;
+		}
+	}
+
+	private static String[] scanDevices(UsbManager manager)
+	{
+		if (manager == null) {
+			Log.w("UsbHelper", "no manager");
+			return null;
+		}
+		HashMap<String,UsbDevice> devlist = manager.getDeviceList();
+		if (devlist == null)
+			return null;
+		String[] list = devlist.keySet().toArray(new String[devlist.size()]);
+		return list;
+	}
+
 	public static int open(String name, int mode)
 	{
 		try {
@@ -61,6 +103,34 @@ public final class UsbHelper
 		} catch (Exception e) {
 			Log.w("UsbHelper", "caught exception " + e);
 			return -1;
+		}
+	}
+
+	public static void startEventMonitor(UsbEventListener listener)
+	{
+		try {
+			startEventMonitor(context, manager, listener);
+		} catch (Exception e) {
+			Log.w("UsbHelper", "caught exception " + e);
+		}
+	}
+
+	public static void stopEventMonitor()
+	{
+		try {
+			stopEventMonitor(context);
+		} catch (Exception e) {
+			Log.w("UsbHelper", "caught exception " + e);
+		}
+	}
+
+	public static String[] scanDevices()
+	{
+		try {
+			return scanDevices(manager);
+		} catch (Exception e) {
+			Log.w("UsbHelper", "caught exception " + e);
+			return null;
 		}
 	}
 }
