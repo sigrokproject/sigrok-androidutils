@@ -48,9 +48,9 @@ public class CopyLibsTask extends Task
 	private static final HashMap<String,String> blacklist;
 
 	static {
-	    HashMap bl = new HashMap<String,String>();
-	    bl.put("libpcre.so", "libercp.so");
-	    blacklist = bl;
+		HashMap bl = new HashMap<String,String>();
+		bl.put("libpcre.so", "libercp.so");
+		blacklist = bl;
 	}
 
 	private static BuildException buildException(Exception e)
@@ -82,7 +82,7 @@ public class CopyLibsTask extends Task
 
 		String bl = blacklist.get(s);
 		if (bl != null)
-		    s = bl;
+			s = bl;
 
 		return s;
 	}
@@ -172,7 +172,7 @@ public class CopyLibsTask extends Task
 						offs + name.length()));
 				}
 				if (!fix.equals(name.substring(0, fix.length()))) {
-				        fixups.add(new Range(offs, offs + fix.length(), fix.getBytes("US-ASCII")));
+					fixups.add(new Range(offs, offs + fix.length(), fix.getBytes("US-ASCII")));
 				}
 			}
 			return name;
@@ -247,9 +247,9 @@ public class CopyLibsTask extends Task
 								break outer;
 							if (r > 0) {
 								if (rg.replacement == null)
-								    Arrays.fill(buf, 0, r, (byte)0);
+									Arrays.fill(buf, 0, r, (byte)0);
 								else
-								    System.arraycopy(rg.replacement, (int)(offs-rg.start), buf, 0, r);
+									System.arraycopy(rg.replacement, (int)(offs-rg.start), buf, 0, r);
 								os.write(buf, 0, r);
 								chunk -= r;
 							}
@@ -472,7 +472,7 @@ public class CopyLibsTask extends Task
 
 	};
 
-	protected File destDir = null;  // The destination directory.
+	protected File destDir = null; // The destination directory.
 	protected Vector<ResourceCollection> rcs = new Vector<ResourceCollection>();
 	protected PatternSet patterns = new PatternSet();
 	protected String property = null;

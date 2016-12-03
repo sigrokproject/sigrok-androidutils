@@ -60,8 +60,8 @@ public final class UsbHelper
 	private static synchronized void startEventMonitor(Context context, UsbManager manager, UsbEventListener listener)
 	{
 		if (eventMonitor != null) {
-		    eventMonitor.stop();
-		    eventMonitor = null;
+			eventMonitor.stop();
+			eventMonitor = null;
 		}
 		if (context == null) {
 			Log.w("UsbHelper", "no context");
@@ -78,8 +78,8 @@ public final class UsbHelper
 	private static synchronized void stopEventMonitor(Context context)
 	{
 		if (eventMonitor != null) {
-		    eventMonitor.stop();
-		    eventMonitor = null;
+			eventMonitor.stop();
+			eventMonitor = null;
 		}
 	}
 
