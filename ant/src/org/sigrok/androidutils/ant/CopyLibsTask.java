@@ -35,6 +35,7 @@ import java.util.Queue;
 import java.util.TreeSet;
 import java.util.Vector;
 import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.DynamicAttribute;
 import org.apache.tools.ant.Task;
 import org.apache.tools.ant.types.FileSet;
 import org.apache.tools.ant.types.PatternSet;
@@ -43,7 +44,7 @@ import org.apache.tools.ant.types.ResourceCollection;
 import org.apache.tools.ant.types.resources.FileProvider;
 import org.apache.tools.ant.types.selectors.SelectorUtils;
 
-public class CopyLibsTask extends Task
+public class CopyLibsTask extends Task implements DynamicAttribute
 {
 	private static final HashMap<String,String> blacklist;
 
@@ -208,7 +209,7 @@ public class CopyLibsTask extends Task
 
 		protected File getDestName(File dest)
 		{
-			File d = new File(dest, subdir);
+			File d = (subdir == null? dest : new File(dest, subdir));
 			File f = new File(d, destname);
 			return f;
 		}
@@ -476,10 +477,19 @@ public class CopyLibsTask extends Task
 	protected Vector<ResourceCollection> rcs = new Vector<ResourceCollection>();
 	protected PatternSet patterns = new PatternSet();
 	protected String property = null;
+	protected Vector<String> rpath = new Vector<String>();
 
 	public void setTodir(File destDir)
 	{
 		this.destDir = destDir;
+	}
+
+	public void setDynamicAttribute(String name, String value)
+	{
+		if ("rpath-link".equals(name))
+			this.rpath.add(value);
+		else
+			throw new BuildException("copylibs doesn't support the \"" + name + "\" attribute");
 	}
 
 	public void addFileset(FileSet set)
@@ -528,8 +538,10 @@ public class CopyLibsTask extends Task
 				}
 				Integer m = new Integer(l.elf.header.e_machine);
 				Worker w = workers.get(m);
-				if (w == null)
+				if (w == null) {
 					workers.put(m, (w = new Worker(m.intValue())));
+					w.addRpath(rpath);
+				}
 				w.addWork(l);
 			}
 		}

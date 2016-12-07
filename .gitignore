@@ -14,11 +14,14 @@ Makefile.in
 /ltmain.sh
 /missing
 /ar-lib
+/jni/
 *.jar
 *.class
 *.o
 *.lo
 *.la
+*.aar
+*.pom
 .deps/
 .libs/
 .dirstamp

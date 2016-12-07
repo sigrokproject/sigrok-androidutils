@@ -21,10 +21,12 @@
 
 <project>
 
+  <property name="android.abi" value="armeabi"/>
+
   <target name="utils" >
     <mkdir dir="build"/>
     <javac srcdir="src" destdir="build" includeantruntime="no"
-	classpath="${android.sdk}/platforms/${android.platform}/android.jar"/>
+      classpath="${android.sdk}/platforms/${android.platform}/android.jar"/>
     <jar destfile="sigrok-androidutils.jar">
       <fileset dir="build" />
     </jar>
@@ -37,6 +39,76 @@
       <fileset dir="ant/build" />
       <fileset dir="ant/resources"/>
     </jar>
+  </target>
+
+  <target name="-declare-anttasks">
+    <taskdef resource="anttasks.properties"
+      classpath="ant/sigrok-androidutils-anttasks.jar"/>
+  </target>
+
+  <target name="aar" depends="-declare-anttasks">
+    <copylibs todir="jni/${android.abi}" property="bundled_libs" rpath-link="${prefix}/lib">
+      <fileset file="${prefix}/lib/jni/libsigrok_java_core_classes.so" />
+      <exclude name="libc.so"/>
+      <exclude name="libm.so"/>
+      <exclude name="libdl.so"/>
+      <exclude name="liblog.so"/>
+      <exclude name="libstdc++.so"/>
+      <exclude name="libz.so"/>
+    </copylibs>
+    <copy file=".libs/libsigrokandroidutils.so" todir="jni/${android.abi}" />
+    <mkdir dir="aidl" />
+    <loadresource property="bindings.versioncode">
+      <propertyresource name="bindings.version" />
+      <filterchain>
+        <tokenfilter>
+          <filetokenizer />
+          <replaceregex pattern="[0-9]+" replace="0000\0" flags="g" />
+          <replaceregex pattern="0*([0-9]{3})\.?" replace="\1" flags="g" />
+          <replaceregex pattern="0*([1-9][0-9]*|0)([^0-9].*)?$" replace="\1" />
+        </tokenfilter>
+      </filterchain>
+    </loadresource>
+    <jar destfile="classes.jar">
+      <zipfileset includes="**/*.class" src="sigrok-androidutils.jar" />
+      <zipfileset includes="**/*.class" src="${prefix}/share/java/sigrok-core.jar" />
+    </jar>
+    <zip destfile="sigrok-core-android-${bindings.version}.aar">
+      <zipfileset dir="aidl" prefix="aidl" />
+      <zipfileset dir="jni" prefix="jni" />
+      <zipfileset dir="." includes="classes.jar" />
+      <mappedresources>
+        <concat>
+          <fileset file="AndroidManifest.xml.in" />
+          <filterchain>
+            <expandproperties />
+          </filterchain>
+        </concat>
+        <mergemapper to="AndroidManifest.xml" />
+      </mappedresources>
+      <mappedresources>
+        <concat><![CDATA[<?xml version='1.0' encoding='utf-8'?>
+<resources>
+	<array name="sigrok_androidutils_jni_libs">
+		${bundled_libs}
+	</array>
+</resources>]]></concat>
+        <mergemapper to="res/values/sigrok_androidutils_jni_libs.xml" />
+      </mappedresources>
+    </zip>
+  </target>
+
+  <target name="pom" >
+    <echo file="sigrok-core-android-${bindings.version}.pom"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.sigrok</groupId>
+  <artifactId>sigrok-core-android</artifactId>
+  <version>${bindings.version}</version>
+  <packaging>aar</packaging>
+</project>
+]]></echo>
   </target>
 
 </project>

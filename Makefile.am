@@ -38,11 +38,20 @@ dist_pkgdata_DATA = device_filter.xml
 jardir = $(prefix)/jar
 jar_DATA = $(UTILS_JAR) $(ANTTASKS_JAR)
 
+mvndir = $(prefix)/.m2/repository/org/sigrok/sigrok-core-android/$(BINDINGS_VERSION)
+mvn_DATA = $(SIGROK_CORE_AAR) $(SIGROK_CORE_POM)
+
 UTILS_JAR = sigrok-androidutils.jar
 
 ANTTASKS_JAR = ant/sigrok-androidutils-anttasks.jar
 
-ANTFLAGS = -Dandroid.sdk=$(ANDROID_SDK) -Dandroid.platform=$(ANDROID_PLATFORM)
+BINDINGS_VERSION = $(LIBSIGROKCXX_VERSION)
+
+SIGROK_CORE_AAR = sigrok-core-android-$(BINDINGS_VERSION).aar
+SIGROK_CORE_POM = sigrok-core-android-$(BINDINGS_VERSION).pom
+
+ANTFLAGS = -Dandroid.sdk=$(ANDROID_SDK) -Dandroid.platform=$(ANDROID_PLATFORM) \
+	-Dprefix=$(prefix) -Dbindings.version=$(BINDINGS_VERSION)
 
 EXTRA_DIST = build.xml src ant/src ant/resources
 
@@ -52,9 +61,16 @@ $(UTILS_JAR): always
 $(ANTTASKS_JAR): always
 	$(AM_V_GEN)ant -S -q anttasks
 
+$(SIGROK_CORE_AAR): always $(UTILS_JAR) $(ANTTASKS_JAR) $(lib_LTLIBRARIES)
+	$(AM_V_GEN)ant -S -q $(ANTFLAGS) aar
+
+$(SIGROK_CORE_POM): always
+	$(AM_V_GEN)ant -S -q $(ANTFLAGS) pom
+
 clean-local:
-	-rm -rf build ant/build
+	-rm -rf build ant/build jni
 	-rm -f $(UTILS_JAR) $(ANTTASKS_JAR)
+	-rm -f $(SIGROK_CORE_AAR) $(SIGROK_CORE_POM) classes.jar
 
 .PHONY: always
 
