@@ -48,7 +48,7 @@ public class CopyLibsTask extends Task
 	private static final HashMap<String,String> blacklist;
 
 	static {
-		HashMap bl = new HashMap<String,String>();
+		HashMap<String,String> bl = new HashMap<String,String>();
 		bl.put("libpcre.so", "libercp.so");
 		blacklist = bl;
 	}
