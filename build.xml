@@ -95,6 +95,7 @@
 </resources>]]></concat>
         <mergemapper to="res/values/sigrok_androidutils_jni_libs.xml" />
       </mappedresources>
+      <zipfileset file="device_filter.xml" fullpath="res/xml/sigrok_androidutils_device_filter.xml"/>
     </zip>
   </target>
 

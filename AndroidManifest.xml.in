@@ -29,6 +29,7 @@
 
     <application>
        <meta-data android:name="org.sigrok.androidutils.jni_libs_resource_id" android:resource="@array/sigrok_androidutils_jni_libs"/>
+       <meta-data android:name="org.sigrok.androidutils.device_filter_resource_id" android:resource="@xml/sigrok_androidutils_device_filter"/>
     </application>
 
 </manifest>
