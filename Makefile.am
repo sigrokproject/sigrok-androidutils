@@ -67,6 +67,13 @@ $(SIGROK_CORE_AAR): always $(UTILS_JAR) $(ANTTASKS_JAR) $(lib_LTLIBRARIES)
 $(SIGROK_CORE_POM): always
 	$(AM_V_GEN)ant -S -q $(ANTFLAGS) pom
 
+update-device-filter:
+	@echo "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
+	@echo "<!-- Generated via 'make update-device-filter', don't edit. -->"
+	@echo "<resources>"
+	@echo -e -n `wget 'http://sigrok.org/gitweb/?p=libsigrok.git;a=blob_plain;f=contrib/z60_libsigrok.rules' -q -O - | grep idVendor | sed 's/ATTRS{idVendor}=="\(.*\)", ATTRS{idProduct}=="\(.*\)", MODE.*/<usb-device vendor-id="\1" product-id="\2" \/>\\\n/p' | sort | uniq`
+	@echo "</resources>"
+
 clean-local:
 	-rm -rf build ant/build jni
 	-rm -f $(UTILS_JAR) $(ANTTASKS_JAR)
