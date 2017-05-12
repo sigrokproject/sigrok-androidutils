@@ -106,7 +106,7 @@ public class UsbSupplicant
 			for (int i = 0; i < count; i++) {
 				String name = parser.getAttributeName(i);
 				// All attribute values are ints
-				int value = parseAttribute(name, parser.getAttributeValue(i));
+				int value = Integer.parseInt(parser.getAttributeValue(i));
 
 				if ("vendor-id".equals(name)) {
 					vendorId = value;
@@ -122,14 +122,6 @@ public class UsbSupplicant
 			}
 			return new DeviceFilter(vendorId, productId,
 					deviceClass, deviceSubclass, deviceProtocol);
-		}
-
-		private static int parseAttribute(String name, String value) {
-			// vendor-id and product-id are in hexadecimal format.
-			if ("vendor-id".equals(name) || "product-id".equals(name))
-				return Integer.parseInt(value, 16);
-			else
-				return Integer.parseInt(value);
 		}
 
 		private boolean matches(int clasz, int subclass, int protocol) {
