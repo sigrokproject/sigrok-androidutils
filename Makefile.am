@@ -51,7 +51,8 @@ SIGROK_CORE_AAR = sigrok-core-android-$(BINDINGS_VERSION).aar
 SIGROK_CORE_POM = sigrok-core-android-$(BINDINGS_VERSION).pom
 
 ANTFLAGS = -Dandroid.sdk=$(ANDROID_SDK) -Dandroid.platform=$(ANDROID_PLATFORM) \
-	-Dprefix=$(prefix) -Dbindings.version=$(BINDINGS_VERSION)
+	-Dprefix=$(prefix) -Dbindings.version=$(BINDINGS_VERSION) \
+	-Dant.build.javac.target=1.6 -Dant.build.javac.source=1.6
 
 EXTRA_DIST = build.xml src ant/src ant/resources
 
