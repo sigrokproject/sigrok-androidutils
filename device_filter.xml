@@ -12,6 +12,8 @@
  <usb-device vendor-id="10766" product-id="1" />
  <usb-device vendor-id="10766" product-id="2" />
  <usb-device vendor-id="10766" product-id="3" />
+ <usb-device vendor-id="10766" product-id="32" />
+ <usb-device vendor-id="10766" product-id="33" />
  <usb-device vendor-id="1204" product-id="20992" />
  <usb-device vendor-id="1204" product-id="21002" />
  <usb-device vendor-id="1204" product-id="24610" />
@@ -33,8 +35,10 @@
  <usb-device vendor-id="1535" product-id="40961" />
  <usb-device vendor-id="1535" product-id="40962" />
  <usb-device vendor-id="1659" product-id="8963" />
+ <usb-device vendor-id="2080" product-id="1" />
  <usb-device vendor-id="2217" product-id="20" />
  <usb-device vendor-id="2217" product-id="21" />
+ <usb-device vendor-id="2217" product-id="5" />
  <usb-device vendor-id="2217" product-id="9" />
  <usb-device vendor-id="2341" product-id="14465" />
  <usb-device vendor-id="2391" product-id="1416" />
@@ -50,6 +54,8 @@
  <usb-device vendor-id="3090" product-id="28685" />
  <usb-device vendor-id="3090" product-id="28686" />
  <usb-device vendor-id="3090" product-id="28694" />
+ <usb-device vendor-id="3090" product-id="28709" />
+ <usb-device vendor-id="3090" product-id="28928" />
  <usb-device vendor-id="33026" product-id="33026" />
  <usb-device vendor-id="4161" product-id="33025" />
  <usb-device vendor-id="42496" product-id="40960" />
@@ -68,4 +74,5 @@
  <usb-device vendor-id="7504" product-id="24718" />
  <usb-device vendor-id="8352" product-id="16675" />
  <usb-device vendor-id="8617" product-id="4097" />
+ <usb-device vendor-id="8617" product-id="4102" />
 </resources>
